@@ -55,8 +55,9 @@
 				atmos_machines += A
 
 	SSmapping.reg_in_areas_in_z(areas)
-	SSatoms.InitializeAtoms(turfs)
-	SSatoms.InitializeAtoms(atoms)
+	SSatoms.InitializeAtoms(areas + turfs + atoms)
+	// NOTE, now that Initialize and LateInitialize run correctly, do we really
+	// need these two below?
 	SSmachines.setup_template_powernets(cables)
 	SSair.setup_template_machinery(atmos_machines)
 
@@ -132,6 +133,9 @@
 
 	log_game("[name] loaded at [T.x],[T.y],[T.z]")
 	return bounds
+
+/datum/map_template/proc/post_load()
+	return
 
 /datum/map_template/proc/get_affected_turfs(turf/T, centered = FALSE)
 	var/turf/placement = T

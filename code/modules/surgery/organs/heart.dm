@@ -98,7 +98,7 @@
 		failed = TRUE
 
 /obj/item/organ/heart/get_availability(datum/species/S)
-	return !(NOBLOOD in S.inherent_traits)
+	return !(NOBLOOD in S.species_traits)
 
 /obj/item/organ/heart/cursed
 	name = "cursed heart"
@@ -230,7 +230,7 @@
 
 /obj/item/organ/heart/cybernetic/on_life()
 	. = ..()
-	if(dose_available && owner.health <= owner.crit_threshold && !owner.has_reagent(rid))
+	if(dose_available && owner.health <= owner.crit_threshold && !owner.reagents.has_reagent(rid))
 		used_dose()
 
 /obj/item/organ/heart/cybernetic/proc/used_dose()

@@ -119,10 +119,6 @@
 	name = "Healium Supply Control (Computer Board)"
 	build_path = /obj/machinery/computer/atmos_control/tank/healium_tank
 
-/obj/item/circuitboard/computer/atmos_control/tank/hexane_tank
-	name = "Hexane Supply Control (Computer Board)"
-	build_path = /obj/machinery/computer/atmos_control/tank/hexane_tank
-
 /obj/item/circuitboard/computer/atmos_control/tank/hydrogen_tank
 	name = "Hydrogen Supply Control (Computer Board)"
 	build_path = /obj/machinery/computer/atmos_control/tank/hydrogen_tank
@@ -163,6 +159,14 @@
 	name = "Zauker Supply Control (Computer Board)"
 	build_path = /obj/machinery/computer/atmos_control/tank/zauker_tank
 
+/obj/item/circuitboard/computer/atmos_control/tank/helium_tank
+	name = "Helium Supply Control (Computer Board)"
+	build_path = /obj/machinery/computer/atmos_control/tank/helium_tank
+
+/obj/item/circuitboard/computer/atmos_control/tank/antinoblium_tank
+	name = "Antinoblium Supply Control (Computer Board)"
+	build_path = /obj/machinery/computer/atmos_control/tank/antinoblium_tank
+
 /obj/item/circuitboard/computer/auxiliary_base
 	name = "Auxiliary Base Management Console (Computer Board)"
 	icon_state = "engineering"
@@ -187,7 +191,6 @@
 	name = "Communications (Computer Board)"
 	icon_state = "engineering"
 	build_path = /obj/machinery/computer/communications
-	var/lastTimeUsed = 0
 
 /obj/item/circuitboard/computer/message_monitor
 	name = "Message Monitor (Computer Board)"
@@ -475,11 +478,6 @@
 
 //Supply
 
-/obj/item/circuitboard/computer/bounty
-	name = "\improper Nanotrasen Bounty Console (Computer Board)"
-	icon_state = "supply"
-	build_path = /obj/machinery/computer/bounty
-
 /obj/item/circuitboard/computer/cargo
 	name = "Supply Console (Computer Board)"
 	icon_state = "supply"
@@ -500,21 +498,34 @@
 		obj_flags |= EMAGGED
 		to_chat(user, "<span class='notice'>You adjust [src]'s routing and receiver spectrum, unlocking special supplies and contraband.</span>")
 
+/obj/item/circuitboard/computer/cargo/configure_machine(obj/machinery/computer/cargo/machine)
+	if(!istype(machine))
+		CRASH("Cargo board attempted to configure incorrect machine type: [machine] ([machine?.type])")
+
+	machine.contraband = contraband
+	if (obj_flags & EMAGGED)
+		machine.obj_flags |= EMAGGED
+	else
+		machine.obj_flags &= ~EMAGGED
+
 /obj/item/circuitboard/computer/cargo/express
 	name = "Express Supply Console (Computer Board)"
 	build_path = /obj/machinery/computer/cargo/express
 
-/obj/item/circuitboard/computer/cargo/express/multitool_act(mob/living/user)
-	. = ..()
-	if (!(obj_flags & EMAGGED))
-		to_chat(user, "<span class='alert'>Routing protocols are already set to: \"factory defaults\".</span>")
-	else
-		to_chat(user, "<span class='notice'>You reset the routing protocols to: \"factory defaults\".</span>")
-		obj_flags &= ~EMAGGED
-
 /obj/item/circuitboard/computer/cargo/express/emag_act(mob/living/user)
-		to_chat(user, "<span class='notice'>You change the routing protocols, allowing the Drop Pod to land anywhere on the station.</span>")
+	if(!(obj_flags & EMAGGED))
+		contraband = TRUE
 		obj_flags |= EMAGGED
+		to_chat(user, "<span class='notice'>You change the routing protocols, allowing the Drop Pod to land anywhere on the station.</span>")
+
+/obj/item/circuitboard/computer/cargo/express/multitool_act(mob/living/user)
+	if (!(obj_flags & EMAGGED))
+		contraband = !contraband
+		to_chat(user, "<span class='notice'>Receiver spectrum set to [contraband ? "Broad" : "Standard"].</span>")
+	else
+		to_chat(user, "<span class='notice'>You reset the destination-routing protocols and receiver spectrum to factory defaults.</span>")
+		contraband = FALSE
+		obj_flags &= ~EMAGGED
 
 /obj/item/circuitboard/computer/cargo/request
 	name = "Supply Request Console (Computer Board)"
