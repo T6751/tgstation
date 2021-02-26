@@ -16,8 +16,12 @@
 	minimal_access = list(ACCESS_ATMOSPHERICS, ACCESS_MAINT_TUNNELS, ACCESS_AUX_BASE, ACCESS_CONSTRUCTION, ACCESS_MECH_ENGINE, ACCESS_MINERAL_STOREROOM)
 	paycheck = PAYCHECK_MEDIUM
 	paycheck_department = ACCOUNT_ENG
+
+	liver_traits = list(TRAIT_ENGINEER_METABOLISM)
+
 	display_order = JOB_DISPLAY_ORDER_ATMOSPHERIC_TECHNICIAN
 	bounty_types = CIV_JOB_ENG
+	departments = DEPARTMENT_ENGINEERING
 
 /datum/outfit/job/atmos
 	name = "Atmospheric Technician"

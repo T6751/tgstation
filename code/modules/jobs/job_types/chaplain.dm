@@ -15,6 +15,7 @@
 	paycheck_department = ACCOUNT_SRV
 
 	display_order = JOB_DISPLAY_ORDER_CHAPLAIN
+	departments = DEPARTMENT_SERVICE
 
 
 /datum/job/chaplain/after_spawn(mob/living/H, mob/M)
@@ -128,6 +129,8 @@
 		/obj/item/stamp/chap = 1,
 		/obj/item/camera/spooky = 1
 		)
+
+	skillchips = list(/obj/item/skillchip/entrails_reader)
 
 	backpack = /obj/item/storage/backpack/cultpack
 	satchel = /obj/item/storage/backpack/cultpack
